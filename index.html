@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Music Player</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <div class="logo">
+                <i class="fas fa-music fa-2x"></i>
+                <h1>Advanced Music Player</h1>
+            </div>
+            <div class="search-container">
+                <input type="text" id="searchTerm" placeholder="Search for songs, artists, or albums...">
+                <button id="searchTermBtn">
+                    <i class="fas fa-search"></i>
+                    Search
+                </button>
+            </div>
+            <div class="control-buttons">
+                <button id="darkModeBtn">
+                    <i class="fas fa-moon"></i>
+                    Dark Mode
+                </button>
+                <button id="stereoModeBtn">
+                    <i class="fas fa-headphones"></i>
+                    Stereo Mode
+                </button>
+                <button id="ambientModeBtn">
+                    <i class="fas fa-volume-down"></i>
+                    Ambient Mode
+                </button>
+                <button id="shuffleBtn">
+                    <i class="fas fa-random"></i>
+                    Shuffle
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="songs-grid" id="songs"></main>
+
+    <script src="script.js"></script>
+</body>
+</html>
