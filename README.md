@@ -68,12 +68,17 @@ The Shot Music Tunes Player is a web-based music streaming application that allo
 - **Extended API Support:** Integrate additional music APIs to expand the song library.
 - **Lyrics Display:** Show synchronized song lyrics during playback.
 
+## Recent UI & Feature Updates
 
+- **Social Media Handles in UI:** GitHub, LinkedIn, and Instagram icons are now displayed in the top-right of the navigation bar for easy access to your profiles.
+- **Footer Section:** A new footer at the bottom of the page displays app credits, API acknowledgments, and a friendly message.
+- **Custom Favicon:** The browser tab now shows a custom play button icon in a purple circle, representing the music theme of the app.
+- **Vertically Centered Main Section:** Before searching, the main (photo/songs) section is centered vertically for a balanced and modern look. After searching, results appear in the center as usual.
+- **Responsive & Themed:** All new UI elements are fully responsive and adapt to both light and dark modes.
 
 ## Acknowledgments
 - **Apple iTunes API:** For providing song previews and metadata.
 - **Font Awesome:** For the icons used in the player.
-
 
 
 ---
