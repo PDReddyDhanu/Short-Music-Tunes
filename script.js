@@ -174,6 +174,16 @@ function createSongCard(result) {
     return article;
 }
 
+// Helper to set main centering based on content
+function setMainCentering(isCentered) {
+    const main = document.getElementById('songs');
+    if (isCentered) {
+        main.classList.add('center-content');
+    } else {
+        main.classList.remove('center-content');
+    }
+}
+
 // Search and display songs
 const updateTerm = () => {
     const term = document.getElementById('searchTerm').value;
@@ -185,6 +195,7 @@ const updateTerm = () => {
     const url = `https://itunes.apple.com/search?term=${encodeURIComponent(term)}&limit=50`;
     const songContainer = document.getElementById('songs');
     songContainer.innerHTML = '<div class="loading">Searching for songs...</div>';
+    setMainCentering(false);
 
     fetch(url)
         .then((response) => response.json())
@@ -192,6 +203,7 @@ const updateTerm = () => {
             songContainer.innerHTML = '';
             if (data.results.length === 0) {
                 songContainer.innerHTML = '<div class="no-results">No songs found. Try a different search term.</div>';
+                setMainCentering(true);
                 return;
             }
 
@@ -205,6 +217,7 @@ const updateTerm = () => {
         .catch(error => {
             console.error('Request failed:', error);
             songContainer.innerHTML = '<div class="error">An error occurred while searching. Please try again.</div>';
+            setMainCentering(true);
         });
 };
 
@@ -267,8 +280,9 @@ document.addEventListener('visibilitychange', () => {
     }
 });
 
-// Initial search suggestion
+// On load, center main section
 window.addEventListener('load', () => {
+    setMainCentering(true);
     const suggestions = [
         'The Beatles',
         'Ed Sheeran',
@@ -279,3 +293,5 @@ window.addEventListener('load', () => {
     const randomSuggestion = suggestions[Math.floor(Math.random() * suggestions.length)];
     document.getElementById('searchTerm').placeholder = `Try searching for "${randomSuggestion}"...`;
 });
+
+// Social Media Handles: Static links in HTML. Add dynamic logic here if needed in the future.
