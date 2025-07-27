@@ -247,6 +247,64 @@ button:hover {
     margin-bottom: 0.2rem;
 }
 
+.volume-control {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-left: 0.5rem;
+}
+.volume-slider {
+    width: 90px;
+    height: 5px;
+    -webkit-appearance: none;
+    background: rgba(98,0,234,0.10);
+    border-radius: 5px;
+    outline: none;
+    box-shadow: 0 1px 4px #ff408122;
+}
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 15px;
+    height: 15px;
+    background: var(--secondary-color);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 8px #ff408144;
+    border: 2px solid #fff;
+}
+.volume-control button {
+    background: none;
+    border: none;
+    color: var(--secondary-color);
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+    padding: 0 0.2rem;
+}
+.volume-control button:hover {
+    color: #e6004c;
+    transform: scale(1.15);
+}
+
+.visualizer-container {
+    height: 54px;
+    background: rgba(98,0,234,0.04);
+    margin-top: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 0 22px 22px;
+    overflow: hidden;
+}
+.visualizer-bar {
+    width: 4px;
+    height: 22px;
+    background: var(--secondary-color);
+    margin: 0 2.5px;
+    border-radius: 2px;
+    transition: height 0.15s;
+}
+
 @media (max-width: 768px) {
     .songs-grid {
         grid-template-columns: 1fr;
@@ -516,6 +574,17 @@ button:hover {
     background: linear-gradient(90deg, var(--secondary-color) 60%, var(--primary-color) 100%);
     transform: scale(1.05);
 }
+.volume-percent {
+    min-width: 80px;
+    text-align: center;
+    font-weight: bold;
+    color: #6200ea;
+    font-size: 1.1rem;
+    background: #fff;
+    border-radius: 8px;
+    padding: 0.5rem 0.8rem;
+    box-shadow: 0 1px 4px #ff408122;
+}
 @media (max-width: 900px) {
     .songs-grid {
         grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -546,5 +615,9 @@ button:hover {
     .search-filter-group button, .action-buttons-row button {
         font-size: 0.95rem;
         padding: 0.6rem 1rem;
+    }
+    .volume-percent {
+        font-size: 1rem;
+        padding: 0.4rem 0.6rem;
     }
 }

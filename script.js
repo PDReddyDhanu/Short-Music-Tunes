@@ -34,6 +34,26 @@ function formatTime(seconds) {
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
 }
 
+function createVisualizer(container) {
+    const bars = 20;
+    for (let i = 0; i < bars; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'visualizer-bar';
+        bar.style.setProperty('--i', i);
+        container.appendChild(bar);
+    }
+}
+
+function updateVisualizer(container, audio) {
+    if (!audio.paused && !audio.ended) {
+        const bars = container.children;
+        for (let i = 0; i < bars.length; i++) {
+            const height = Math.random() * 30 + 10;
+            bars[i].style.height = `${height}px`;
+        }
+    }
+}
+
 function createSongCard(result) {
     const article = document.createElement('div');
     article.className = 'song-card';
@@ -88,37 +108,90 @@ function createSongCard(result) {
         document.body.removeChild(a);
     });
 
+    // Visualizer
+    const visualizerContainer = document.createElement('div');
+    visualizerContainer.className = 'visualizer-container';
+    createVisualizer(visualizerContainer);
+    let visualizerInterval = null;
+
+    // Volume control (slider and mute)
+    const volumeControl = document.createElement('div');
+    volumeControl.className = 'volume-control';
+    const volumeIcon = document.createElement('i');
+    volumeIcon.className = 'fas fa-volume-up';
+    const volumeSlider = document.createElement('input');
+    volumeSlider.type = 'range';
+    volumeSlider.className = 'volume-slider';
+    volumeSlider.min = 0;
+    volumeSlider.max = 1;
+    volumeSlider.step = 0.1;
+    volumeSlider.value = 1;
+    const muteBtn = document.createElement('button');
+    muteBtn.title = 'Mute/Unmute';
+    muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+    let lastVolume = 1;
+
+    volumeSlider.addEventListener('input', (e) => {
+        audio.volume = e.target.value;
+        lastVolume = audio.volume;
+        if (audio.volume == 0) {
+            volumeIcon.className = 'fas fa-volume-mute';
+        } else if (audio.volume < 0.5) {
+            volumeIcon.className = 'fas fa-volume-down';
+        } else {
+            volumeIcon.className = 'fas fa-volume-up';
+        }
+    });
+    muteBtn.addEventListener('click', () => {
+        if (audio.muted) {
+            audio.muted = false;
+            volumeSlider.value = lastVolume;
+            audio.volume = lastVolume;
+        } else {
+            audio.muted = true;
+            volumeSlider.value = 0;
+        }
+    });
+
+    volumeControl.appendChild(volumeIcon);
+    volumeControl.appendChild(volumeSlider);
+    volumeControl.appendChild(muteBtn);
+
     // Event listeners
     playBtn.addEventListener('click', () => {
         if (audio.paused) {
             if (currentAudio && currentAudio !== audio) {
                 currentAudio.pause();
                 currentAudio.currentTime = 0;
+                if (currentAudio._visualizerInterval) {
+                    clearInterval(currentAudio._visualizerInterval);
+                }
             }
             audio.play();
             currentAudio = audio;
             playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            visualizerInterval = setInterval(() => updateVisualizer(visualizerContainer, audio), 120);
+            audio._visualizerInterval = visualizerInterval;
         } else {
             audio.pause();
             playBtn.innerHTML = '<i class="fas fa-play"></i>';
+            if (visualizerInterval) clearInterval(visualizerInterval);
         }
+    });
+
+    audio.addEventListener('pause', () => {
+        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        if (visualizerInterval) clearInterval(visualizerInterval);
+    });
+    audio.addEventListener('ended', () => {
+        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        if (visualizerInterval) clearInterval(visualizerInterval);
     });
 
     audio.addEventListener('timeupdate', () => {
         const progress = (audio.currentTime / audio.duration) * 100;
         progressBar.style.width = `${progress}%`;
         currentTime.textContent = formatTime(audio.currentTime);
-    });
-
-    audio.addEventListener('ended', () => {
-        playBtn.innerHTML = '<i class="fas fa-play"></i>';
-        progressBar.style.width = '0%';
-        currentTime.textContent = '0:00';
-        if (repeatEnabled) {
-            audio.currentTime = 0;
-            audio.play();
-            playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-        }
     });
 
     progressContainer.addEventListener('click', (e) => {
@@ -132,6 +205,7 @@ function createSongCard(result) {
     timeDisplay.appendChild(duration);
 
     controls.appendChild(playBtn);
+    controls.appendChild(volumeControl);
     controls.appendChild(downloadBtn);
 
     info.appendChild(artist);
@@ -142,6 +216,7 @@ function createSongCard(result) {
     article.appendChild(img);
     article.appendChild(info);
     article.appendChild(controls);
+    article.appendChild(visualizerContainer);
 
     return article;
 }
