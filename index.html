@@ -15,36 +15,22 @@
                 <i class="fas fa-music fa-2x"></i>
                 <h1>Short Music Tunes</h1>
             </div>
-            <div class="search-container">
-                <input type="text" id="searchTerm" placeholder="Search for songs, artists, or albums...">
-                <button id="searchTermBtn">
-                    <i class="fas fa-search"></i>
-                    Search
-                </button>
+            <div class="top-controls-row">
+                <div class="search-filter-group">
+                    <label for="filterSelect" class="filter-label">Filter:</label>
+                    <select id="filterSelect">
+                        <option value="all">All</option>
+                        <option value="music">Music</option>
+                        <option value="musicVideo">Music Video</option>
+                        <option value="album">Album</option>
+                    </select>
+                    <input type="text" id="searchTerm" placeholder="Search for songs, artists, or albums...">
+                    <button id="searchTermBtn"><i class="fas fa-search"></i> Search</button>
+                </div>
             </div>
-            <div class="control-buttons">
-                <button id="darkModeBtn">
-                    <i class="fas fa-moon"></i>
-                    Dark Mode
-                </button>
-                <button id="stereoModeBtn">
-                    <i class="fas fa-headphones"></i>
-                    Stereo Mode
-                </button>
-                <button id="ambientModeBtn">
-                    <i class="fas fa-volume-down"></i>
-                    Ambient Mode
-                </button>
-                <button id="shuffleBtn">
-                    <i class="fas fa-random"></i>
-                    Shuffle
-                </button>
-            </div>
-            <!-- Social Media Handles -->
-            <div class="social-media-handles">
-                <a href="https://github.com/PDReddyDhanu" target="_blank" aria-label="GitHub"><i class="fab fa-github fa-2x"></i></a>
-                <a href="https://www.linkedin.com/in/dhanunjay-reddy-palakolanu-pdr/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin fa-2x"></i></a>
-                <a href="https://www.instagram.com/p.d.reddy_dhanu04_08/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram fa-2x"></i></a>
+            <div class="action-buttons-row">
+                <button id="darkModeBtn"><i class="fas fa-moon"></i> Dark Mode</button>
+                <button id="repeatModeBtn">Repeat Mode</button>
             </div>
         </div>
     </nav>
@@ -59,6 +45,11 @@
             <span>| Powered by <a href="https://developer.apple.com/documentation/itunes-store-web-service" target="_blank">iTunes API</a> &amp; <a href="https://fontawesome.com/" target="_blank">Font Awesome</a></span>
             <span>| Created by <a href="https://github.com/PDReddyDhanu" target="_blank">Dhanunjay Reddy Palakolanu</a></span>
             <span>| Enjoy your music experience! 🎵</span>
+        </div>
+        <div class="footer-social-media">
+            <a href="https://github.com/PDReddyDhanu" target="_blank" aria-label="GitHub" title="GitHub"><i class="fab fa-github fa-2x"></i></a>
+            <a href="https://www.linkedin.com/in/dhanunjay-reddy-palakolanu-pdr/" target="_blank" aria-label="LinkedIn" title="LinkedIn"><i class="fab fa-linkedin fa-2x"></i></a>
+            <a href="https://www.instagram.com/p.d.reddy_dhanu04_08/" target="_blank" aria-label="Instagram" title="Instagram"><i class="fab fa-instagram fa-2x"></i></a>
         </div>
     </footer>
 </body>

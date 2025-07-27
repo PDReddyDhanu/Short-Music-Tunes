@@ -3,84 +3,60 @@
 - **LinkedIn:** [Dhanunjay Reddy Palakolanu](https://www.linkedin.com/in/dhanunjay-reddy-palakolanu-pdr/)
 - **Instagram:** [p.d.reddy_dhanu04_08](https://www.instagram.com/p.d.reddy_dhanu04_08/)
 
-# Short Music Tunes Player
+# Short Music Tunes
 
-## Overview
-The Shot Music Tunes Player is a web-based music streaming application that allows users to search, play, and control songs with ease. It leverages the iTunes API to provide song previews, artist details, and album artwork. The player is designed with an intuitive user interface, multiple playback modes, and responsive design.
+## 🚀 Live Demo
+[Click here to try Short Music Tunes live!](https://pdr-tunes.netlify.app/)
+
+A modern, responsive web app to search, preview, and enjoy short music tunes using the iTunes API.
 
 ## Features
-- **Dark Mode:** Toggle a dark theme for a better viewing experience, reducing eye strain in low-light environments.
-- **Search Functionality:** Search for songs, artists, or albums using the iTunes API, with a dynamic placeholder suggesting popular artists.
-- **Shuffle Mode:** Randomly play songs for a varied listening experience, automatically selecting and playing the next song when a track ends.
-- **Stereo Mode:** Sets the volume to maximum for an immersive experience, ideal for high-fidelity listening.
-- **Ambient Mode:** Lowers the volume for background listening, perfect for a relaxed environment.
-- **Audio Visualizer:** A real-time bar visualizer animates during playback, adding a visual element to the listening experience.
-- **Keyboard Shortcuts:** Press the spacebar to play or pause the current song, enhancing ease of use.
-- **Responsive Design:** The layout adapts to different screen sizes, ensuring a seamless experience across desktop, tablet, and mobile devices.
-- **Automatic Pause:** Automatically pauses the song when the browser tab loses focus, ensuring the user doesn't miss any part of the music.
 
-## Technologies Used
-- **HTML5:** Semantic structure for the web page, ensuring accessibility and search engine optimization.
-- **CSS3:** Styling with modern techniques, including CSS variables for theme customization and media queries for responsive design.
-- **JavaScript (ES6):** Core functionality for the player, including event handling, dynamic content updates, and API calls.
-- **Font Awesome:** Icon library for buttons and controls, ensuring a visually appealing interface.
-- **iTunes API:** Provides access to song previews, album artwork, and artist information for a rich music streaming experience.
-- **Custom CSS Variables:** Used for theme management, allowing quick toggling between light and dark modes.
-
-## Installation & Setup
-1. **Clone the repository:**
-   ```bash
-       git clone https://github.com/your-username/Short-Music-Tunes.git
-   ```
+- **Search** for songs, artists, or albums using the iTunes API.
+- **Filter by Media Type:** All, Music, Music Video, Album (iTunes API filter).
+- **Filter by Language:** All, Telugu, Hindi, English (filters by keywords in song, artist, or album name).
+- **Responsive UI:** Works beautifully on desktop, tablet, and mobile.
+- **Dark Mode:** Toggle between light and dark themes for comfortable viewing.
+- **Repeat Mode:** Loop the currently playing song with a single click.
+- **Download Preview:** Download the 30-second preview for any song.
+- **Play/Pause Controls:** Play, pause, and control each song preview. Only one song plays at a time.
+- **Error Handling:** User-friendly messages for no results or network errors.
+- **Clean Codebase:** All dead code, unused styles, and legacy features have been removed for clarity and maintainability.
 
 ## How to Use
-1. **Search:** Enter a term (e.g., artist or song title) and click the search button to fetch and display matching results.
-2. **Playback Controls:**
-   - Click the play button to start playback.
-   - Use the pause button to stop playback.
-   - Adjust the volume with the slider control.
-   - Skip to a specific part of the song by clicking the progress bar.
-3. **Theme Control:** Use the Dark Mode button to toggle between light and dark themes.
-4. **Mode Buttons:**
-   - **Stereo Mode:** Sets the volume to full.
-   - **Ambient Mode:** Lowers the volume to 20%.
-5. **Shuffle:** Click the shuffle button to enable or disable random playback order.
 
-## Code Structure
-### HTML
-- **Header Section:** Contains the navigation bar, logo, and search bar.
-- **Main Section:** Displays song cards with album artwork, song information, and controls.
+1. **Search:**
+   - Enter a song, artist, or album name in the search bar and click **Search**.
+2. **Filter:**
+   - Use the **Filter** dropdown to select All, Music, Music Video, or Album.
+   - Use the **Language** dropdown to show only Telugu, Hindi, or English songs (based on keywords in the result).
+3. **Play a Song:**
+   - Click the play button on any song card to listen to a 30-second preview.
+   - Only one song plays at a time.
+4. **Repeat Mode:**
+   - Click **Repeat Mode** to toggle looping for the currently playing song.
+5. **Dark Mode:**
+   - Click **Dark Mode** to switch between light and dark themes.
+6. **Download:**
+   - Click the download button on a song card to save the preview.
 
-### CSS
-- **Theming:** Uses CSS variables for primary and secondary colors, background colors, and text colors.
-- **Grid Layout:** Implements a flexible grid for displaying songs.
-- **Responsive Design:** Media queries adjust the layout for different screen sizes.
+## UI/UX Highlights
+- Modern, clean, and mobile-friendly layout.
+- Controls and filters are easy to use and accessible.
+- Clear feedback for loading, errors, and no results.
+- Footer with credits and social media links.
 
-### JavaScript
-- **Search Function:** Fetches songs from the iTunes API and dynamically generates song cards.
-- **Audio Controls:** Manages playback, volume adjustment, progress tracking, and shuffle functionality.
-- **Dark Mode:** Toggles between light and dark themes by applying CSS classes.
-- **Visualizer:** Animates bars to simulate audio waves during playback.
+## Tech Stack
+- **HTML, CSS, JavaScript** (Vanilla)
+- **iTunes Search API** for music data
+- **Font Awesome** for icons
 
-## Future Enhancements
-- **Playlist Creation:** Allow users to create and manage custom playlists.
-- **User Authentication:** Enable user accounts for saving preferences and playlists.
-- **Extended API Support:** Integrate additional music APIs to expand the song library.
-- **Lyrics Display:** Show synchronized song lyrics during playback.
-
-## Recent UI & Feature Updates
-
-- **Social Media Handles in UI:** GitHub, LinkedIn, and Instagram icons are now displayed in the top-right of the navigation bar for easy access to your profiles.
-- **Footer Section:** A new footer at the bottom of the page displays app credits, API acknowledgments, and a friendly message.
-- **Custom Favicon:** The browser tab now shows a custom play button icon in a purple circle, representing the music theme of the app.
-- **Vertically Centered Main Section:** Before searching, the main (photo/songs) section is centered vertically for a balanced and modern look. After searching, results appear in the center as usual.
-- **Responsive & Themed:** All new UI elements are fully responsive and adapt to both light and dark modes.
-
-## Acknowledgments
-- **Apple iTunes API:** For providing song previews and metadata.
-- **Font Awesome:** For the icons used in the player.
-
+## Notes
+- Language filtering is based on keywords in the song, artist, or album name (not perfect, but practical for most use cases).
+- All features work without page reloads.
+- The codebase is actively maintained and free of dead code or unused styles.
 
 ---
-Thank you for using the Advanced Music Player! Feel free to share feedback or report issues via GitHub.
+
+Enjoy discovering and previewing music with **Short Music Tunes**!
 

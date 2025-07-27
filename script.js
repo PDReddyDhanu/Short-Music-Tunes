@@ -1,5 +1,6 @@
+// Minimal, robust search and display logic for iTunes API
 let currentAudio = null;
-let isShuffleMode = false;
+let repeatEnabled = false;
 
 // Dark mode toggle
 const darkModeBtn = document.getElementById('darkModeBtn');
@@ -10,42 +11,29 @@ darkModeBtn.addEventListener('click', () => {
     icon.classList.toggle('fa-sun');
 });
 
-// Shuffle functionality
-const shuffleBtn = document.getElementById('shuffleBtn');
-shuffleBtn.addEventListener('click', () => {
-    isShuffleMode = !isShuffleMode;
-    shuffleBtn.style.background = isShuffleMode ? '#ff79b0' : '#ff4081';
+// --- Repeat Mode and Lyrics Feature ---
+const repeatBtn = document.getElementById('repeatModeBtn');
+repeatBtn.addEventListener('click', () => {
+    repeatEnabled = !repeatEnabled;
+    repeatBtn.style.background = repeatEnabled ? 'linear-gradient(90deg, #ff4081 60%, #6200ea 100%)' : 'var(--secondary-color)';
+    repeatBtn.textContent = repeatEnabled ? 'Repeat: ON' : 'Repeat: OFF';
 });
 
-// Create audio visualizer
-function createVisualizer(container) {
-    const bars = 20;
-    for (let i = 0; i < bars; i++) {
-        const bar = document.createElement('div');
-        bar.className = 'visualizer-bar';
-        container.appendChild(bar);
+function setMainCentering(isCentered) {
+    const main = document.getElementById('songs');
+    if (isCentered) {
+        main.classList.add('center-content');
+    } else {
+        main.classList.remove('center-content');
     }
 }
 
-// Update visualizer
-function updateVisualizer(container, audio) {
-    if (!audio.paused) {
-        const bars = container.children;
-        for (let i = 0; i < bars.length; i++) {
-            const height = Math.random() * 30 + 10;
-            bars[i].style.height = `${height}px`;
-        }
-    }
-}
-
-// Format time
 function formatTime(seconds) {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = Math.floor(seconds % 60);
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
 }
 
-// Create song card
 function createSongCard(result) {
     const article = document.createElement('div');
     article.className = 'song-card';
@@ -86,21 +74,19 @@ function createSongCard(result) {
     const playBtn = document.createElement('button');
     playBtn.innerHTML = '<i class="fas fa-play"></i>';
 
-    const volumeControl = document.createElement('div');
-    volumeControl.className = 'volume-control';
-    const volumeIcon = document.createElement('i');
-    volumeIcon.className = 'fas fa-volume-up';
-    const volumeSlider = document.createElement('input');
-    volumeSlider.type = 'range';
-    volumeSlider.className = 'volume-slider';
-    volumeSlider.min = 0;
-    volumeSlider.max = 1;
-    volumeSlider.step = 0.1;
-    volumeSlider.value = 1;
-
-    const visualizerContainer = document.createElement('div');
-    visualizerContainer.className = 'visualizer-container';
-    createVisualizer(visualizerContainer);
+    // Download button
+    const downloadBtn = document.createElement('button');
+    downloadBtn.title = 'Download preview';
+    downloadBtn.innerHTML = '<i class="fas fa-download"></i>';
+    downloadBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const a = document.createElement('a');
+        a.href = result.previewUrl;
+        a.download = `${result.artistName} - ${result.trackName}.m4a`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    });
 
     // Event listeners
     playBtn.addEventListener('click', () => {
@@ -118,31 +104,20 @@ function createSongCard(result) {
         }
     });
 
-    volumeSlider.addEventListener('input', (e) => {
-        audio.volume = e.target.value;
-        volumeIcon.className = `fas fa-volume-${audio.volume === 0 ? 'mute' : audio.volume < 0.5 ? 'down' : 'up'}`;
-    });
-
     audio.addEventListener('timeupdate', () => {
         const progress = (audio.currentTime / audio.duration) * 100;
         progressBar.style.width = `${progress}%`;
         currentTime.textContent = formatTime(audio.currentTime);
-        updateVisualizer(visualizerContainer, audio);
     });
 
     audio.addEventListener('ended', () => {
         playBtn.innerHTML = '<i class="fas fa-play"></i>';
         progressBar.style.width = '0%';
         currentTime.textContent = '0:00';
-
-        if (isShuffleMode) {
-            const songs = document.querySelectorAll('.song-card');
-            const randomIndex = Math.floor(Math.random() * songs.length);
-            const nextSong = songs[randomIndex].querySelector('audio');
-            const nextPlayBtn = songs[randomIndex].querySelector('button');
-            nextSong.play();
-            nextPlayBtn.innerHTML = '<i class="fas fa-pause"></i>';
-            currentAudio = nextSong;
+        if (repeatEnabled) {
+            audio.currentTime = 0;
+            audio.play();
+            playBtn.innerHTML = '<i class="fas fa-pause"></i>';
         }
     });
 
@@ -155,11 +130,9 @@ function createSongCard(result) {
     progressContainer.appendChild(progressBar);
     timeDisplay.appendChild(currentTime);
     timeDisplay.appendChild(duration);
-    volumeControl.appendChild(volumeIcon);
-    volumeControl.appendChild(volumeSlider);
 
     controls.appendChild(playBtn);
-    controls.appendChild(volumeControl);
+    controls.appendChild(downloadBtn);
 
     info.appendChild(artist);
     info.appendChild(song);
@@ -169,44 +142,41 @@ function createSongCard(result) {
     article.appendChild(img);
     article.appendChild(info);
     article.appendChild(controls);
-    article.appendChild(visualizerContainer);
 
     return article;
 }
 
-// Helper to set main centering based on content
-function setMainCentering(isCentered) {
-    const main = document.getElementById('songs');
-    if (isCentered) {
-        main.classList.add('center-content');
-    } else {
-        main.classList.remove('center-content');
-    }
-}
-
 // Search and display songs
+const filterSelect = document.getElementById('filterSelect');
+
 const updateTerm = () => {
     const term = document.getElementById('searchTerm').value;
     if (!term || term === '') {
         alert('Please enter a search term');
         return;
     }
-
-    const url = `https://itunes.apple.com/search?term=${encodeURIComponent(term)}&limit=50`;
+    let url = `https://itunes.apple.com/search?term=${encodeURIComponent(term)}&limit=50`;
+    const filter = filterSelect.value;
+    if (filter === 'music') {
+        url += '&media=music';
+    } else if (filter === 'musicVideo') {
+        url += '&media=musicVideo';
+    } else if (filter === 'album') {
+        url += '&entity=album';
+    }
     const songContainer = document.getElementById('songs');
     songContainer.innerHTML = '<div class="loading">Searching for songs...</div>';
     setMainCentering(false);
-
+    console.log('Fetching from URL:', url);
     fetch(url)
         .then((response) => response.json())
         .then((data) => {
             songContainer.innerHTML = '';
-            if (data.results.length === 0) {
+            if (!data.results || data.results.length === 0) {
                 songContainer.innerHTML = '<div class="no-results">No songs found. Try a different search term.</div>';
                 setMainCentering(true);
                 return;
             }
-
             data.results.forEach(result => {
                 if (result.previewUrl) {
                     const songCard = createSongCard(result);
@@ -221,23 +191,13 @@ const updateTerm = () => {
         });
 };
 
-// Audio mode controls
-const setVolume = (volume) => {
-    const audioElements = document.getElementsByTagName('audio');
-    Array.from(audioElements).forEach(audio => {
-        audio.volume = volume;
-        const volumeSlider = audio.parentElement.querySelector('.volume-slider');
-        if (volumeSlider) {
-            volumeSlider.value = volume;
-        }
-        const volumeIcon = audio.parentElement.querySelector('.fa-volume-up, .fa-volume-down, .fa-volume-mute');
-        if (volumeIcon) {
-            volumeIcon.className = `fas fa-volume-${volume === 0 ? 'mute' : volume < 0.5 ? 'down' : 'up'}`;
-        }
-    });
-};
+filterSelect.addEventListener('change', () => {
+    const term = document.getElementById('searchTerm').value;
+    if (term && term !== '') {
+        updateTerm();
+    }
+});
 
-// Event listeners
 document.getElementById('searchTermBtn').addEventListener('click', updateTerm);
 document.getElementById('searchTerm').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
@@ -245,42 +205,7 @@ document.getElementById('searchTerm').addEventListener('keypress', (e) => {
     }
 });
 
-document.getElementById('stereoModeBtn').addEventListener('click', () => {
-    setVolume(1.0);
-    document.getElementById('stereoModeBtn').style.background = '#ff4081';
-    document.getElementById('ambientModeBtn').style.background = '#ff4081';
-});
-
-document.getElementById('ambientModeBtn').addEventListener('click', () => {
-    setVolume(0.2);
-    document.getElementById('ambientModeBtn').style.background = '#ff79b0';
-    document.getElementById('stereoModeBtn').style.background = '#ff4081';
-});
-
-// Add keyboard shortcuts
-document.addEventListener('keydown', (e) => {
-    if (e.code === 'Space' && currentAudio) {
-        e.preventDefault();
-        if (currentAudio.paused) {
-            currentAudio.play();
-        } else {
-            currentAudio.pause();
-        }
-        const playBtn = currentAudio.parentElement.querySelector('button');
-        playBtn.innerHTML = `<i class="fas fa-${currentAudio.paused ? 'play' : 'pause'}"></i>`;
-    }
-});
-
-// Handle visibility change
-document.addEventListener('visibilitychange', () => {
-    if (document.hidden && currentAudio) {
-        currentAudio.pause();
-        const playBtn = currentAudio.parentElement.querySelector('button');
-        playBtn.innerHTML = '<i class="fas fa-play"></i>';
-    }
-});
-
-// On load, center main section
+// On load, center main section and ensure ambient background is hidden
 window.addEventListener('load', () => {
     setMainCentering(true);
     const suggestions = [
@@ -293,5 +218,3 @@ window.addEventListener('load', () => {
     const randomSuggestion = suggestions[Math.floor(Math.random() * suggestions.length)];
     document.getElementById('searchTerm').placeholder = `Try searching for "${randomSuggestion}"...`;
 });
-
-// Social Media Handles: Static links in HTML. Add dynamic logic here if needed in the future.
